@@ -1,0 +1,23 @@
+{
+  "name": "express2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate-up": "sequelize-cli db:migrate",
+    "migrate-down": "sequelize-cli db:migrate:undo",
+    "migration-generate": "sequelize-cli migration:generate --name"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3",
+    "moment": "^2.29.1",
+    "pg": "^8.7.3"
+  },
+  "devDependencies": {
+    "sequelize": "^6.17.0",
+    "sequelize-cli": "^6.4.1"
+  }
+}
