@@ -18,7 +18,7 @@ app.post("/users", async (request, response) => {
   if (!request.body) return response.sendStatus(400);
 
   try {
-    const userPayload = appUtils.validateNewUserData(request.body);
+    const userPayload = appUtils.validateUserData(request.body);
     await db.user.create(userPayload);
     return response.send(userPayload);
   } catch (e) {
@@ -32,46 +32,47 @@ app.get("/users", async (request, response) => {
   return response.send(allUsers);
 });
 
-app.get("/edit/:id", function(request, response){
+app.get("/users/:id", async (request, response) => {
   const userid = request.params.id;
-  user.findAll({where:{id: userid}, raw: true })
-  .then(data=>{
-    response.render("edit.hbs", {
-      user: data[0]
-    });
-  })
-  .catch(err=>console.log(err));
-});
-
-app.put("/users/:id", (request, response) => {
-  if (!request.body) return response.sendStatus(400);
   try {
-    const userUpdate = appUtils.handleUserUpdate();
-    return response.send(userUpdate);
+    const user = await appUtils.getUserById(userid);
+    return response.send(user);
   } catch (e) {
-    console.log(e.massage);
     return response.status(404).json({ message: e.message });
   }
 });
 
-app.delete("/users/:id", (request, response) => {
-  try{
-    const userDelete = appUtils.userDelete()
-    return response.send
+app.put("/users/:id", async (request, response) => {
+  const userid = request.params.id;
+  try {
+    await appUtils.getUserById(userid);
+  } catch (e) {
+    return response.status(404).json({ message: e.message });
   }
-
+  try {
+    const userPayload = appUtils.validateUserData(request.body);
+    const user = await appUtils.updateUser(userid, userPayload);
+    return response.send(user);
+  } catch (e) {
+    return response.status(400).json({ message: e.message });
+  }
 });
 
-
-
+app.dalete("/users/:id", async (request, response) => {
+  const userid = request.params.id;
+  try {
+    await appUtils.getUserById(userid);
+  } catch (e) {
+    return response.status(404).json({ message: e.message });
+  }
+  try {
+    await appUtils.deleteUser(userid);
+    return response.sendStatus(200)
+  } catch (e) {
+    return response.status(500).json({ message: e.message });
+  }
+});
 
 app.listen(3002, () => {
   console.log("Application listening on port 3002!");
 });
-/**
-GET /users 1
-GET /users/:id 1
-POST /users 1 
-PUT /users/:id
-DELETE /users/:id
- */

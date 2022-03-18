@@ -1,6 +1,7 @@
 const moment = require("moment");
+const db = require("./models");
 
-function validateNewUserData(body) {
+function validateUserData(body) {
   if (!body.userName || !body.email || !body.password || !body.dob) {
     throw new Error("Please pass correct user data");
   }
@@ -14,29 +15,32 @@ function validateNewUserData(body) {
   return user;
 }
 
-function handleUserUpdate(id) {
-  const userid = request.params.id;
-  
-  const userName = request.body.userName;
-  const email = request.body.email;
-  const password = request.body.password;
-  const dob = request.body.dob;
+async function getUserById(userid) {
+  const user = await db.user.findByPk(userid);
+  if (!user) {
+    throw new Error("USER NOT FOUND");
+  }
+  return user;
+}
 
-  
-  const user = db.users.find((u) => u.id == id);
-  if (user) {
-    user.name = userName;
-    user.age = dob;
-    user.password = password;
-    user.email = email;
-    response.send(user);
-  } 
-// app.post("/delete/:id", function(req, res){  
-//   const userid = req.params.id;
-//   User.destroy({where: {id: userid} }).then(() => {
-//     res.redirect("/");
-//   }).catch(err=>console.log(err));
+async function updateUser(id, body) {
+  const userName = body.userName;
+  const email = body.email;
+  const password = body.password;
+  const dob = body.dob;
+
+  await db.user.update({ userName, email, password, dob }, { where: { id } });
+  return getUserById(id)
+}
+
+async function deleteUser (id) {
+  await db.user.destroy({ where: { id } });
+}
+
+
 module.exports = {
-  validateNewUserData,
-  handleUserUpdate
+  validateUserData,
+  updateUser,
+  getUserById,
+  deleteUser
 };
