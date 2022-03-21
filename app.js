@@ -9,6 +9,8 @@ const bcrypt = require(" bcryptjs ");
 
 const jsonParser = express.json();
 const app = express();
+const salt = bcrypt.genSaltSync(10)
+const passwordToSave = bcrypt.hashSync(password, salt)
 
 app.use(jsonParser);
 app.use(express.urlencoded());
