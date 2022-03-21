@@ -3,17 +3,44 @@ const appUtils = require("./utils");
 const db = require("./models");
 const { request } = require("express");
 const { response } = require("express");
-const jwt = require('jsonwebtoken');
-const token = jwt.sign({ foo: 'bar' }, 'shhhhh');
+const jwt = require("jsonwebtoken");
+const token = jwt.sign({ foo: "bar" }, "shhhhh");
 
 const jsonParser = express.json();
 const app = express();
 
 app.use(jsonParser);
 app.use(express.urlencoded());
+// app.use(cookieParsers());
 
-app.get("/health", (req, res) => {
+// app.use(express.json());
+// app.use((req, res, next) => {
+//   if (req.headers.authorization) {
+//     jwt.verify(
+//       req.headers.authorization.split(" ")[1],
+//       tokenKey,
+//       (err, payload) => {
+//         if (err) next();
+//         else if (payload) {
+//           for (let user of users) {
+//             if (user.id === payload.id) {
+//               req.user = user;
+//               next();
+//             }
+//           }
+
+//           if (!req.user) next();
+//         }
+//       }
+//     );
+//   }
+
+//   next();
+// });
+
+app.get("/health", appUtils.authenticateToken, (req, res) => {
   return res.status(200).json({ OK: "da" });
+  //res.json(posts.filter(post => post.username === req.user.name)
 });
 
 app.post("/users", async (request, response) => {
@@ -34,7 +61,7 @@ app.get("/users", async (request, response) => {
   return response.send(allUsers);
 });
 
-app.get("/users/:id", async (request, response) => {
+app.get("/users/:id", appUtils.authenticateToken, async (request, response) => {
   const userid = request.params.id;
   try {
     const user = await appUtils.getUserById(userid);
@@ -60,7 +87,7 @@ app.put("/users/:id", async (request, response) => {
   }
 });
 
-app.dalete("/users/:id", async (request, response) => {
+app.delete("/users/:id", async (request, response) => {
   const userid = request.params.id;
   try {
     await appUtils.getUserById(userid);
@@ -69,9 +96,32 @@ app.dalete("/users/:id", async (request, response) => {
   }
   try {
     await appUtils.deleteUser(userid);
-    return response.sendStatus(200)
+    return response.sendStatus(200);
   } catch (e) {
     return response.status(500).json({ message: e.message });
+  }
+});
+
+app.post("/auth/login", async (req, res) => {
+  try {
+    for (let user of users) {
+      if (
+        req.body.login === user.userName &&
+        req.body.password === user.password
+      ) {
+        const token = jwt.sign({ id: user.id }, tokenKey);
+        return res.status(200).json({
+          id: user.id,
+          login: userName,
+          token
+        });
+      }
+    }
+    //return res.status(404).json({ message: 'User not found' }
+
+    return res.json({ token: "some-value" });
+  } catch (error) {
+    return res.status(500).json({ message: error.massage });
   }
 });
 
