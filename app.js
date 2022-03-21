@@ -3,6 +3,8 @@ const appUtils = require("./utils");
 const db = require("./models");
 const { request } = require("express");
 const { response } = require("express");
+const jwt = require('jsonwebtoken');
+const token = jwt.sign({ foo: 'bar' }, 'shhhhh');
 
 const jsonParser = express.json();
 const app = express();
