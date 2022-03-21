@@ -113,13 +113,11 @@ app.post("/auth/login", async (req, res) => {
         return res.status(200).json({
           id: user.id,
           login: userName,
-          token
+          token: "some-value",
         });
       }
     }
-    //return res.status(404).json({ message: 'User not found' }
-
-    return res.json({ token: "some-value" });
+    return res.status(404).json({ message: "User not found" });
   } catch (error) {
     return res.status(500).json({ message: error.massage });
   }
