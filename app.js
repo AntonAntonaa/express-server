@@ -5,42 +5,16 @@ const { request } = require("express");
 const { response } = require("express");
 const jwt = require("jsonwebtoken");
 const token = jwt.sign({ foo: "bar" }, "shhhhh");
+const bcrypt = require(" bcryptjs ");
 
 const jsonParser = express.json();
 const app = express();
 
 app.use(jsonParser);
 app.use(express.urlencoded());
-// app.use(cookieParsers());
-
-// app.use(express.json());
-// app.use((req, res, next) => {
-//   if (req.headers.authorization) {
-//     jwt.verify(
-//       req.headers.authorization.split(" ")[1],
-//       tokenKey,
-//       (err, payload) => {
-//         if (err) next();
-//         else if (payload) {
-//           for (let user of users) {
-//             if (user.id === payload.id) {
-//               req.user = user;
-//               next();
-//             }
-//           }
-
-//           if (!req.user) next();
-//         }
-//       }
-//     );
-//   }
-
-//   next();
-// });
 
 app.get("/health", appUtils.authenticateToken, (req, res) => {
   return res.status(200).json({ OK: "da" });
-  //res.json(posts.filter(post => post.username === req.user.name)
 });
 
 app.post("/users", async (request, response) => {
@@ -104,9 +78,9 @@ app.delete("/users/:id", async (request, response) => {
 
 app.post("/auth/login", async (req, res) => {
   try {
-    const dbUser= db.users.findOne({where: req.body.userName})
-    if (!dbUser || dbUser.password !== req.body.password){
-      throw new Error ("guessed wrong")
+    const dbUser = db.users.findOne({ where: req.body.userName });
+    if (!dbUser || dbUser.password !== req.body.password) {
+      throw new Error("WRONG");
     }
     return res.status(404).json({ message: "User not found" });
   } catch (error) {
