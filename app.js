@@ -104,18 +104,9 @@ app.delete("/users/:id", async (request, response) => {
 
 app.post("/auth/login", async (req, res) => {
   try {
-    for (let user of users) {
-      if (
-        req.body.login === user.userName &&
-        req.body.password === user.password
-      ) {
-        const token = jwt.sign({ id: user.id }, tokenKey);
-        return res.status(200).json({
-          id: user.id,
-          login: userName,
-          token: "some-value",
-        });
-      }
+    const dbUser= db.users.findOne({where: req.body.userName})
+    if (!dbUser || dbUser.password !== req.body.password){
+      throw new Error ("guessed wrong")
     }
     return res.status(404).json({ message: "User not found" });
   } catch (error) {
