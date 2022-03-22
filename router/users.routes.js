@@ -44,9 +44,10 @@ router.delete(
 
 router.post(
   "/auth/login",
-  userController.postLogin,
   body("userName").isLength({ min: 5 }),
-  body("password").isLength({ min: 8 })
+  body("password").isLength({ min: 8 }),
+  userController.postLogin
+  
 );
 
 module.exports = router;
