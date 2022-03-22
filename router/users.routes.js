@@ -13,15 +13,15 @@ router.post(
   body("email").isEmail(),
   body("dob").isDate(),
   body("password").isLength({ min: 8 }),
-  userController.postUser,
-  appUtils.authenticateToken
+  appUtils.authenticateToken,
+  userController.postUser
 );
 
 router.get(
   "/:id",
   param("id").isNumeric({ no_symbols: true }),
-  userController.getOne,
-  appUtils.authenticateToken
+  appUtils.authenticateToken,
+  userController.getOne
 );
 
 router.put(
@@ -31,8 +31,8 @@ router.put(
   body("email").isEmail(),
   body("dob").isDate(),
   body("password").isLength({ min: 8 }),
-  userController.putUser,
-  appUtils.authenticateToken
+  appUtils.authenticateToken,
+  userController.putUser
 );
 
 router.delete(
