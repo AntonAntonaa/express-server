@@ -9,37 +9,37 @@ router.get("/", userController.getAll);
 
 router.post(
   "/",
-  userController.postUser,
-  appUtils.authenticateToken,
   body("userName").isLength({ min: 5 }),
   body("email").isEmail(),
   body("dob").isDate(),
-  body("password").isLength({ min: 8 })
+  body("password").isLength({ min: 8 }),
+  userController.postUser,
+  appUtils.authenticateToken
 );
 
 router.get(
   "/:id",
+  param("id").isNumeric({ no_symbols: true }),
   userController.getOne,
-  appUtils.authenticateToken,
-  param("id").isNumeric({ no_symbols: true })
+  appUtils.authenticateToken
 );
 
 router.put(
   "/:id",
-  userController.putUser,
-  appUtils.authenticateToken,
   param("id").isNumeric({ no_symbols: true }),
   body("userName").isLength({ min: 5 }),
   body("email").isEmail(),
   body("dob").isDate(),
-  body("password").isLength({ min: 8 })
+  body("password").isLength({ min: 8 }),
+  userController.putUser,
+  appUtils.authenticateToken
 );
 
 router.delete(
   "/id",
   deleteUser,
-  appUtils.authenticateToken,
-  param("id").isNumeric({ no_symbols: true })
+  param("id").isNumeric({ no_symbols: true }),
+  appUtils.authenticateToken
 );
 
 router.post(
@@ -47,7 +47,6 @@ router.post(
   body("userName").isLength({ min: 5 }),
   body("password").isLength({ min: 8 }),
   userController.postLogin
-  
 );
 
 module.exports = router;
