@@ -18,7 +18,7 @@ module.exports = {
     await queryInterface.addColumn("users", "email", {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
     });
     await queryInterface.addColumn("users", "dob", {
       type: DataTypes.DATE,
@@ -33,9 +33,9 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-     await queryInterface.removeColumn('users', 'dob');
-     await queryInterface.removeColumn('users', 'email');
-     await queryInterface.removeColumn('users', 'password');
-     await queryInterface.removeColumn('users', 'userName');
+    await queryInterface.removeColumn("users", "dob");
+    await queryInterface.removeColumn("users", "email");
+    await queryInterface.removeColumn("users", "password");
+    await queryInterface.removeColumn("users", "userName");
   },
 };
