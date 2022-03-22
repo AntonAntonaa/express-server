@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/users.controller");
-const appUtils = require ("../service/utils")
-const { body, param } = require('express-validator');
-
+const appUtils = require("../service/utils");
+const { body, param } = require("express-validator");
 
 router.get("/", userController.getAll);
 
@@ -30,7 +29,7 @@ router.put(
   body("email").isEmail(),
   body("dob").isDate(),
   body("password").isLength({ min: 8 })
-)
+);
 
 router.delete(
   "/id",
@@ -38,6 +37,10 @@ router.delete(
   param("id").isNumeric({ no_symbols: true })
 );
 
+router.post(
+  "/auth/login",
+  body("userName").isLength({ min: 5 }),
+  body("password").isLength({ min: 8 })
+);
 
-
-module.exports = router 
+module.exports = router;

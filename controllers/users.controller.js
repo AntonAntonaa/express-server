@@ -67,10 +67,27 @@ const deleteUser = async (request, response) => {
   }
 };
 
+const postLogin = async (req, res) => {
+  try {
+    const dbUser = db.users.findOne({ where: req.body.userName });
+    if (
+      !dbUser ||
+      !appUtils.validatePassword(req.body.password, dbUser.password)
+    ) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+    delete user.password;
+    return res.json({ token: jwt.sign(user, tokenKey) });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+}
+
 module.exports = {
   getAll,
   postUser,
   getOne,
   putUser,
   deleteUser,
+  postLogin
 };
