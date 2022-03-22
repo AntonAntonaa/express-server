@@ -10,7 +10,6 @@ router.get("/", userController.getAll);
 
 router.post(
   "/",
-  appUtils.authenticateToken,
   body("userName").isLength({ min: 5 }),
   body("email").isEmail(),
   body("dob").isDate(),

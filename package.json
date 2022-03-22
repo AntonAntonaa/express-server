@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrate-up": "sequelize-cli db:migrate",
     "migrate-down": "sequelize-cli db:migrate:undo",
-    "migration-generate": "sequelize-cli migration:generate --name"
+    "migration-generate": "sequelize-cli migration:generate --name",
+    "start": "nodemon app.js"
+    
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +19,7 @@
     "express-validator": "^6.14.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
+    "nodemon": "^2.0.15",
     "pg": "^8.7.3"
   },
   "devDependencies": {
