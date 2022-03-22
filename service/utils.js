@@ -1,5 +1,6 @@
 const moment = require("moment");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken")
 
 function validateUserData(body) {
   if (!body.userName || !body.email || !body.password || !body.dob) {
@@ -18,13 +19,14 @@ function validateUserData(body) {
 }
 
 function authenticateToken(req, res, next) {
-  const authHeader = req.headers["Authorization"];
+  const authHeader = req.headers["authorization"];
+  console.log('headers', req.headers);
   const token = authHeader && authHeader.split(" ")[1];
   if (token == null) {
     return res.status(401).json({ message: "Authorization token is missing" });
   }
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    console.log(err);
+  jwt.verify(token, "tokenKey", (err, user) => {
+    console.log('verify token error', err);
     if (err) return res.sendStatus(401);
     req.user = user;
     next();

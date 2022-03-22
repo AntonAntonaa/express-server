@@ -5,15 +5,16 @@ const appUtils = require("../service/utils");
 const { body, param } = require("express-validator");
 const { deleteUser } = require("../service/users");
 
+
 router.get("/", userController.getAll);
 
 router.post(
   "/",
+  appUtils.authenticateToken,
   body("userName").isLength({ min: 5 }),
   body("email").isEmail(),
   body("dob").isDate(),
   body("password").isLength({ min: 8 }),
-  appUtils.authenticateToken,
   userController.postUser
 );
 

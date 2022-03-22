@@ -18,6 +18,7 @@ module.exports = {
     await queryInterface.addColumn("users", "email", {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true
     });
     await queryInterface.addColumn("users", "dob", {
       type: DataTypes.DATE,

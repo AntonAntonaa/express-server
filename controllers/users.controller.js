@@ -1,6 +1,7 @@
 const router = require("../router");
 const db = require("../models");
 const appUtils = require("../service/utils");
+const jwt = require("jsonwebtoken")
 
 const getAll = async (request, response) => {
   if (!request.body) return response.sendStatus(400);
@@ -74,7 +75,6 @@ const postLogin = async (req, res) => {
         userName: req.body.userName,
       },
     });
-    console.log("u", dbUser);
     if (
       !dbUser ||
       !appUtils.validatePassword(req.body.password, dbUser.password)
@@ -82,9 +82,8 @@ const postLogin = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
     delete dbUser.password;
-    return res.json({ token: jwt.sign(dbUser, tokenKey) });
+    return res.json({ id: dbUser.id, token: jwt.sign(dbUser.toJSON(), "tokenKey") });
   } catch (error) {
-    console.log("qweqw", error);
     return res.status(500).json({ message: error.message });
   }
 };
