@@ -1,5 +1,4 @@
 const moment = require("moment");
-const db = require("./models");
 const bcrypt = require("bcryptjs");
 
 function validateUserData(body) {
@@ -16,28 +15,6 @@ function validateUserData(body) {
     dob: dob.toDate(),
   };
   return user;
-}
-
-async function getUserById(userid) {
-  const user = await db.user.findByPk(userid);
-  if (!user) {
-    throw new Error("USER NOT FOUND");
-  }
-  return user;
-}
-
-async function updateUser(id, body) {
-  const userName = body.userName;
-  const email = body.email;
-  const password = body.password;
-  const dob = body.dob;
-
-  await db.user.update({ userName, email, password, dob }, { where: { id } });
-  return getUserById(id);
-}
-
-async function deleteUser(id) {
-  await db.user.destroy({ where: { id } });
 }
 
 function authenticateToken(req, res, next) {
@@ -60,9 +37,6 @@ function validatePassword(password, hashToCompare) {
 
 module.exports = {
   validateUserData,
-  updateUser,
-  getUserById,
-  deleteUser,
   authenticateToken,
   validatePassword,
 };
