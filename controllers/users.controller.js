@@ -7,6 +7,7 @@ const getAll = async (request, response) => {
   if (!request.body) return response.sendStatus(400);
   try {
     const allUsers = await db.user.findAll();
+    delete dbUser.password;
     return response.send(allUsers);
   } catch (e) {
     console.log(e.massage);
@@ -20,6 +21,7 @@ const postUser = async (request, response) => {
   try {
     const userPayload = appUtils.validateUserData(request.body);
     await db.user.create(userPayload);
+    delete dbUser.password;
     return response.send(userPayload);
   } catch (e) {
     console.log(e.massage);
@@ -31,6 +33,7 @@ const getOne = async (request, response) => {
   const userid = request.params.id;
   try {
     const user = await appUtils.getUserById(userid);
+    delete dbUser.password;
     return response.send(user);
   } catch (e) {
     return response.status(404).json({ message: e.message });
@@ -47,6 +50,7 @@ const putUser = async (request, response) => {
   try {
     const userPayload = appUtils.validateUserData(request.body);
     const user = await appUtils.updateUser(userid, userPayload);
+    delete dbUser.password;
     return response.send(user);
   } catch (e) {
     return response.status(400).json({ message: e.message });
