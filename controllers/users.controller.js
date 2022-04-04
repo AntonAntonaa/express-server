@@ -9,18 +9,20 @@ const getAll = async (request, response) => {
   if (!request.body) return response.sendStatus(400);
   try {
     const allUsers = await db.user.findAll();
-  
-    return response.send(allUsers);
+    const responseUsers = allUsers.map((user) => {
+      delete user.password;
+      return user
+    });
+    return response.send(responseUsers);
   } catch (e) {
     console.log(e.massage);
     return response.status(400).json({ message: e.message });
   }
 };
 
-
 const postUser = async (request, response) => {
   if (!request.body) return response.sendStatus(400);
- delete .password
+    
   try {
     const userPayload = appUtils.validateUserData(request.body);
     await db.user.create(userPayload);
