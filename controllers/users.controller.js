@@ -2,12 +2,14 @@ const router = require("../router");
 const db = require("../models");
 const appUtils = require("../service/utils");
 const jwt = require("jsonwebtoken");
+const { user } = require("pg/lib/defaults");
+const { body } = require("express-validator");
 
 const getAll = async (request, response) => {
   if (!request.body) return response.sendStatus(400);
   try {
     const allUsers = await db.user.findAll();
-    delete dbUser.password;
+  
     return response.send(allUsers);
   } catch (e) {
     console.log(e.massage);
@@ -15,9 +17,10 @@ const getAll = async (request, response) => {
   }
 };
 
+
 const postUser = async (request, response) => {
   if (!request.body) return response.sendStatus(400);
-
+ delete .password
   try {
     const userPayload = appUtils.validateUserData(request.body);
     await db.user.create(userPayload);
