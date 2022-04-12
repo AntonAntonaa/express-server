@@ -10,10 +10,8 @@ router.get("/", userController.getAll);
 
 router.post(
   "/",
-  body("userName").isLength({ min: 5 }),
   body("email").isEmail(),
-  body("dob").isDate(),
-  body("password").isLength({ min: 8 }),
+  body("password").isLength({ min: 6 }),
   userController.postUser
 );
 
@@ -27,10 +25,9 @@ router.get(
 router.put(
   "/:id",
   param("id").isNumeric({ no_symbols: true }),
-  body("userName").isLength({ min: 5 }),
+  body("userName").isLength({ min: 4 }),
   body("email").isEmail(),
-  body("dob").isDate(),
-  body("password").isLength({ min: 8 }),
+  body("password").isLength({ min: 6 }),
   appUtils.authenticateToken,
   userController.putUser
 );
@@ -44,8 +41,8 @@ router.delete(
 
 router.post(
   "/auth/login",
-  body("userName").isLength({ min: 5 }),
-  body("password").isLength({ min: 8 }),
+  body("email").isLength(),
+  body("password").isLength({ min: 4 }),
   userController.postLogin
 );
 

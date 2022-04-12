@@ -22,12 +22,11 @@ const getAll = async (request, response) => {
 
 const postUser = async (request, response) => {
   if (!request.body) return response.sendStatus(400);
-    
   try {
     const userPayload = appUtils.validateUserData(request.body);
-    await db.user.create(userPayload);
-    delete dbUser.password;
-    return response.send(userPayload);
+    const user = await db.user.create(userPayload);
+    delete user.password;
+    return response.json(user).status(200);
   } catch (e) {
     console.log(e.massage);
     return response.status(400).json({ message: e.message });
