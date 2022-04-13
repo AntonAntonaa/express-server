@@ -22,7 +22,6 @@ const getAll = async (request, response) => {
 
 const postUser = async (request, response) => {
   if (!request.body) return response.sendStatus(400);
-    
   try {
     const userPayload = appUtils.validateUserData(request.body);
     await db.user.create(userPayload);
