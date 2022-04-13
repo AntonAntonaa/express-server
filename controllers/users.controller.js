@@ -25,8 +25,12 @@ const postUser = async (request, response) => {
   try {
     const userPayload = appUtils.validateUserData(request.body);
     const user = await db.user.create(userPayload);
-    delete user.password;
-    return response.json(user).status(200);
+    return response.json({
+      user:{ id: user.id,
+        email: user.email,
+        userName: user.userName},
+      token: jwt.sign({id:user.id}, "tokenKey"),
+    });
   } catch (e) {
     console.log(e.massage);
     return response.status(400).json({ message: e.message });
@@ -90,39 +94,16 @@ const postLogin = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
     return res.json({
-      id: dbUser.id,
-      email: dbUser.email,
-      userName: dbUser.userName,
-      token: jwt.sign(dbUser.toJSON(), "tokenKey"),
+      user:{ id: dbUser.id,
+        email: dbUser.email,
+        userName: dbUser.userName},
+      token: jwt.sign({id:dbUser.id}, "tokenKey"),
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
-
-
-((req, res, next) => {
-  if (req.headers.authorization) {
-    jwt.verify(
-      req.headers.authorization.split(" ")[1],
-      tokenKey,
-      (err, payload) => {
-        if (err) next();
-        else if (payload) {
-          for (let user of users) {
-            if (user.id === payload.id) {
-              req.user = user;
-              next();
-            }
-          }
-          if (!req.user) next();
-        }
-      }
-    );
-  }
-  next();
-});
 
 module.exports = {
   getAll,

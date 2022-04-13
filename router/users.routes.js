@@ -10,8 +10,8 @@ router.get("/", userController.getAll);
 
 router.post(
   "/",
-  body("email").isEmail(),
-  body("password").isLength({ min: 6 }),
+  body("email").isEmail().withMessage("email wrong"),
+  body("password").isLength({ min: 6 }).withMessage("password wrong"),
   userController.postUser
 );
 
@@ -46,8 +46,6 @@ router.post(
   userController.postLogin
 );
 
-// router.get('/api/', authenticateToken, (req, res) => {
 
-// })
 
 module.exports = router;
