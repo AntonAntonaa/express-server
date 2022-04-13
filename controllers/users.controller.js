@@ -11,7 +11,7 @@ const getAll = async (request, response) => {
     const allUsers = await db.user.findAll();
     const responseUsers = allUsers.map((user) => {
       delete user.password;
-      return user
+      return user;
     });
     return response.send(responseUsers);
   } catch (e) {
@@ -21,7 +21,6 @@ const getAll = async (request, response) => {
 };
 
 const postUser = async (request, response) => {
-
   if (!request.body) return response.sendStatus(400);
   try {
     const userPayload = appUtils.validateUserData(request.body);
@@ -100,6 +99,30 @@ const postLogin = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+
+
+((req, res, next) => {
+  if (req.headers.authorization) {
+    jwt.verify(
+      req.headers.authorization.split(" ")[1],
+      tokenKey,
+      (err, payload) => {
+        if (err) next();
+        else if (payload) {
+          for (let user of users) {
+            if (user.id === payload.id) {
+              req.user = user;
+              next();
+            }
+          }
+          if (!req.user) next();
+        }
+      }
+    );
+  }
+  next();
+});
 
 module.exports = {
   getAll,

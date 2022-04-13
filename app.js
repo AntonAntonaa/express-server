@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require("express");
 const routes = require("./router");
 const { body, param, validationResult } = require("express-validator");
@@ -18,3 +19,6 @@ app.get("/health", (req, res) => {
 app.listen(3002, () => {
   console.log("Application listening on port 3002!");
 });
+
+
+console.log(process.env.SECRET_KEY)

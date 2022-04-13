@@ -46,6 +46,8 @@ router.post(
   userController.postLogin
 );
 
+// router.get('/api/', authenticateToken, (req, res) => {
 
+// })
 
 module.exports = router;

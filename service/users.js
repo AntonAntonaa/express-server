@@ -1,7 +1,5 @@
 const db = require("../models");
 
-
-
 async function getUserById(userid) {
   const user = await db.user.findByPk(userid);
   if (!user) {
@@ -25,8 +23,7 @@ async function deleteUser(id) {
 }
 
 module.exports = {
-    getUserById,
-    updateUser,
-    deleteUser
-}
-
+  getUserById,
+  updateUser,
+  deleteUser,
+};
