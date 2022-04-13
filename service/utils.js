@@ -3,12 +3,12 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken")
 
 function validateUserData(body) {
-  if (!body.userName || !body.email || !body.password || !body.dob) {
+  if (!body.userName || !body.email || !body.password) {
     throw new Error("Please pass correct user data");
   }
   const salt = bcrypt.genSaltSync(10);
   const passwordToSave = bcrypt.hashSync(body.password, salt);
-  const dob = moment(body.dob, "DD-MM-YYYY");
+  const dob = moment("13-04-2022", "DD-MM-YYYY");
   const user = {
     userName: body.userName,
     email: body.email,

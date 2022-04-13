@@ -21,6 +21,7 @@ const getAll = async (request, response) => {
 };
 
 const postUser = async (request, response) => {
+
   if (!request.body) return response.sendStatus(400);
   try {
     const userPayload = appUtils.validateUserData(request.body);
@@ -89,9 +90,10 @@ const postLogin = async (req, res) => {
     ) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    delete dbUser.password;
     return res.json({
       id: dbUser.id,
+      email: dbUser.email,
+      userName: dbUser.userName,
       token: jwt.sign(dbUser.toJSON(), "tokenKey"),
     });
   } catch (error) {
